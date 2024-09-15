@@ -3,7 +3,14 @@ import Trash from "./assets/trash-alt-svgrepo-com.svg";
 import "./App.css";
 
 function App() {
-  const [todos, setTodos] = useState<any>([]);
+  const [todos, setTodos] = useState<
+    {
+      id: number;
+      title: string;
+      completed: boolean;
+      description: string;
+    }[]
+  >([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -65,7 +72,7 @@ function App() {
       );
       const data = await response.json();
       if (data) {
-        const updatedTodos = todos.map((todo: any) =>
+        const updatedTodos = todos.map((todo) =>
           todo.id === id ? { ...todo, completed } : todo
         );
         setTodos(updatedTodos);
@@ -83,9 +90,11 @@ function App() {
           method: "DELETE",
         }
       );
-      const updatedTodos = todos.filter((todo: any) => todo.id !== id);
+      if (response) {
+        const updatedTodos = todos.filter((todo) => todo.id !== id);
 
-      setTodos(updatedTodos);
+        setTodos(updatedTodos);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -129,7 +138,7 @@ function App() {
           <h3>Loading...</h3>
         ) : (
           <div>
-            {todos.map((todo: any) => (
+            {todos.map((todo) => (
               <div
                 key={todo.id}
                 style={{
